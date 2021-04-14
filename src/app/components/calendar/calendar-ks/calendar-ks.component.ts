@@ -146,7 +146,6 @@ export class CalendarKsComponent implements OnInit {
       )
       .subscribe(
         (res) => {
-          console.log(res);
           this.events = res.map((r) => {
             let actions = undefined;
             let color = colors.gray;
@@ -191,7 +190,6 @@ export class CalendarKsComponent implements OnInit {
           });
         },
         (error) => {
-          console.log(error);
           this.toastr.error('Failed to load reservations');
         }
       );
@@ -457,7 +455,6 @@ export class CalendarKsComponent implements OnInit {
   }
 
   eventToReservation(event: any): any {
-    console.log(event.reservationTitle)
     return {
       reservationId: Number(event.id),
       reserver: event.reserver,

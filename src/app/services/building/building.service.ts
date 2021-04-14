@@ -3,7 +3,6 @@ import { Observable} from 'rxjs';
 import { Building } from 'src/app/models/building';
 import { AuthService } from '../auth/auth.service';
 import { HttpClient } from '@angular/common/http';
-import { LocationService } from '../location/location.service';
 @Injectable({
   providedIn: 'root',
 })
@@ -17,7 +16,7 @@ export class BuildingService {
     }
   }
 
-  constructor(private locationService:LocationService,private authService: AuthService, private httpClient: HttpClient) {}
+  constructor(private authService: AuthService, private httpClient: HttpClient) {}
 
 
   getBuildingsByLocationId(locationId: number): Observable<Building[]> {

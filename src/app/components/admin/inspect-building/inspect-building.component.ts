@@ -11,7 +11,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
 import { Building } from 'src/app/models/building';
 import { AppConfirmService } from 'src/app/services/app-confirm/app-confirm.service';
-import { AppLoaderService } from 'src/app/services/app-loader/app-loader.service';
 import { BuildingService } from 'src/app/services/building/building.service';
 import { LocationService } from 'src/app/services/location/location.service';
 import { RoomService } from 'src/app/services/room/room.service';
@@ -50,13 +49,11 @@ export class InspectBuildingComponent implements OnInit {
     public dialog: MatDialog,
     private roomService: RoomService,
     private toastr: ToastrService,
-    private loader: AppLoaderService
   ) {}
 
   ngOnInit(): void {}
 
   createTable(): void {
-    this.loader.open();
     this.buildingService
       .getBuildingsByLocationId(
         this.locationService.currentLocation?.locationId!
@@ -74,11 +71,9 @@ export class InspectBuildingComponent implements OnInit {
           });
           this.setTableData(arr);
           this.resBuilding = arr;
-          this.loader.close();
         },
         (error) => {
           this.toastr.error(error?.error?.message || error?.error?.error);
-          this.loader.close();
         }
       );
   }
@@ -110,7 +105,6 @@ export class InspectBuildingComponent implements OnInit {
       })
       .subscribe((confirm) => {
         if (confirm) {
-          this.loader.open();
           this.buildingService
             .deleteBuildingById(building)
             .subscribe(
@@ -120,11 +114,9 @@ export class InspectBuildingComponent implements OnInit {
                 );
                 this.setTableData(this.resBuilding);
                 this.toastr.success('Building deleted');
-                this.loader.close();
               },
               (error) => {
                 this.toastr.error(error?.error?.message || error?.error?.error);
-                this.loader.close();
               }
             );
         }
@@ -154,24 +146,19 @@ export class InspectBuildingComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result: BuildingWithRoomCount) => {
       if (result?.buildingId == 0) {
-        this.loader.open();
         this.buildingService.createBuilding(result).subscribe(
           (res) => {
-            this.loader.close();
             this.resBuilding.push(res);
             this.setTableData(this.resBuilding);
             this.toastr.success('Created new building');
           },
           (error) => {
-            this.loader.close();
             this.toastr.error(error?.error?.message || error?.error?.error);
           }
         );
       } else if (result?.buildingId) {
-        this.loader.open();
         this.buildingService.updateBuilding(result).subscribe(
           (res) => {
-            this.loader.close();
             this.resBuilding = this.resBuilding.map((b) =>
               b.buildingId == result.buildingId ? result : b
             );
@@ -180,7 +167,6 @@ export class InspectBuildingComponent implements OnInit {
           },
           (error) => {
             this.toastr.error(error?.error?.message || error?.error?.error);
-            this.loader.close();
           }
         );
       }

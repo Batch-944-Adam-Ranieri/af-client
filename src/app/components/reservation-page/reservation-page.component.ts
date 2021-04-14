@@ -1,12 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatStep, MatStepper } from '@angular/material/stepper';
 
 import { Building } from 'src/app/models/building';
 import { Location } from 'src/app/models/location';
 import { Room } from 'src/app/models/room';
-import { AppConfirmService } from 'src/app/services/app-confirm/app-confirm.service';
 import { BuildingService } from 'src/app/services/building/building.service';
 import { LocationService } from 'src/app/services/location/location.service';
 import { RoomService } from 'src/app/services/room/room.service';
@@ -36,18 +34,15 @@ export class ReservationPageComponent implements OnInit {
   @ViewChild('roomStep') roomStep!: MatStep;
 
   constructor(
-    private _formBuilder: FormBuilder,
     private locationService: LocationService,
     private buildingService: BuildingService,
     private roomService: RoomService,
     public dialog: MatDialog,
-    private confirmService: AppConfirmService
   ) {}
 
   ngOnInit() {}
 
   initCalendarChild(){
-    console.log("Init calendar");
     if (this.calendarChild) {
       this.calendarChild.roomData = this.selectedRoom;
       this.calendarChild.ngOnInit();

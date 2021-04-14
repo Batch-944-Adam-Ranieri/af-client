@@ -1,7 +1,6 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { Router } from '@angular/router';
-import { User } from 'src/app/models/user';
 import { AuthService, DecodedJwtDTO } from 'src/app/services/auth/auth.service';
 
 @Component({
@@ -19,8 +18,6 @@ export class HeaderComponent implements OnInit {
 
   @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger;
   
-  //Need service method to check if User is Logged in
-
   logout(){
     localStorage.removeItem("Authorization");
     location.reload();

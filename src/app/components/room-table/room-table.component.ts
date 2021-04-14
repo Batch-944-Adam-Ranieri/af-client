@@ -69,7 +69,6 @@ export class RoomTableComponent implements OnInit {
   }
 
   chooseRoom(room: Room) {
-    console.log('Selected Room: ', room);
     this.selectedRoom = room;
     this.roomService.currentRoom = room;
   }

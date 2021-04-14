@@ -92,7 +92,6 @@ export class AuthService {
 
   getCurrentUserInfo() {
     let value = localStorage.getItem('Authorization');
-    console.log('jwt', value);
     if (value != null) {
       this.jwt = value;
       try {
@@ -101,7 +100,6 @@ export class AuthService {
         this.decodedJwtDTO = undefined;
       }
     }
-    console.log('current user', this.decodedJwtDTO);
   }
 
   getJWT(): string | undefined {

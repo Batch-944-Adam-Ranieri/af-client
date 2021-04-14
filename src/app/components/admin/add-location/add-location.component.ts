@@ -7,7 +7,6 @@ import {
 } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
-import { Location } from 'src/app/models/location';
 
 export interface LocationDialogData {
   locationId?: number;

@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   Component,
   Input,
   OnInit,
@@ -37,13 +36,11 @@ export class InspectRoomComponent implements OnInit {
   @Input() locationData?: string;
 
   constructor(
-    private locationService: LocationService,
     public dialog: MatDialog,
     private confirmService: AppConfirmService,
     private roomService: RoomService,
     private buildingService: BuildingService,
     private toastr: ToastrService,
-    private loader: AppLoaderService
   ) {}
 
   ngOnInit(): void {
@@ -51,13 +48,11 @@ export class InspectRoomComponent implements OnInit {
   }
 
   createTable(): void {
-    this.loader.open();
     this.roomService
       .getRoomByBuilding(this.buildingService.currentBuilding!)
       .subscribe((res) => {
         this.setTableData(res);
         this.resRoom = res;
-        this.loader.close();
       });
   }
 
@@ -89,7 +84,6 @@ export class InspectRoomComponent implements OnInit {
       })
       .subscribe((confirm) => {
         if (confirm) {
-          this.loader.open();
           this.roomService.deleteRoom(room).subscribe(
             (res) => {
               this.resRoom = this.resRoom.filter(
@@ -97,11 +91,9 @@ export class InspectRoomComponent implements OnInit {
               );
               this.setTableData(this.resRoom);
               this.toastr.success('Deleted room');
-              this.loader.close();
             },
             (error) => {
               this.toastr.error(error?.error?.message || error?.error?.error);
-              this.loader.close();
             }
           );
         }
@@ -122,33 +114,27 @@ export class InspectRoomComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result: Room) => {
       if (result?.roomId == 0) {
-        this.loader.open();
         this.roomService.createRoom(result).subscribe(
           (res) => {
             this.resRoom.push(res);
             this.setTableData(this.resRoom);
-            this.loader.close();
             this.toastr.success('Created new room');
           },
           (error) => {
             this.toastr.error(error?.error?.message || error?.error?.error);
-            this.loader.close();
           }
         );
       } else if (result?.roomId) {
-        this.loader.open();
         this.roomService.updateRoom(result).subscribe(
           (res) => {
             this.resRoom = this.resRoom.map((r) =>
               r.roomId == result.roomId ? result : r
             );
             this.setTableData(this.resRoom);
-            this.loader.close();
             this.toastr.success('Updated room');
           },
           (error) => {
             this.toastr.error(error?.error?.message || error?.error?.error);
-            this.loader.close();
           }
         );
       }

@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { RoomType } from 'src/app/models/room';
-import { AddBuildingComponent, BuildingDialogData } from '../add-building/add-building.component';
+import { AddBuildingComponent } from '../add-building/add-building.component';
 
 export interface RoomDialogData {
   roomId?: number;
