@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Router, RouterStateSnapshot } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../auth/auth.service';
 
@@ -10,16 +10,16 @@ export class TrainerGuardService {
 
   constructor(private router: Router, private authService: AuthService, private toastr: ToastrService) {}
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+  canActivate( state: RouterStateSnapshot) {
     if (this.authService.isTrainerAuthorized() || this.authService.isAdminAuthorized()) {
       return true;
     } else {
-      this.router.navigate(["/login"], {
+      this.router.navigate(["/signin"], {
         queryParams: {
           return: state.url
         }
       });
-      this.toastr.error("You don't have access to this page!");
+      this.toastr.error("You don't have access to this page! Please sign in.");
       return false;
     }
   }

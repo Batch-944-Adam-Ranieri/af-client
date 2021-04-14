@@ -21,65 +21,6 @@ export class AuthService {
   decodedJwtDTO?: DecodedJwtDTO;
   jwt?: string;
 
-  pendingUsers: User[] = [
-    {
-      userId: 1,
-      email: 'user1@g.com',
-      password: '',
-      status: 'PENDING',
-      role: 'trainer',
-    },
-    {
-      userId: 2,
-      email: 'user2@g.com',
-      password: '',
-      status: 'PENDING',
-      role: 'trainer',
-    },
-    {
-      userId: 3,
-      email: 'user3@g.com',
-      password: '',
-      status: 'PENDING',
-      role: 'trainer',
-    },
-    {
-      userId: 4,
-      email: 'user4@g.com',
-      password: '',
-      status: 'PENDING',
-      role: 'trainer',
-    },
-    {
-      userId: 5,
-      email: 'user5@g.com',
-      password: '',
-      status: 'PENDING',
-      role: 'trainer',
-    },
-    {
-      userId: 6,
-      email: 'user6@g.com',
-      password: '',
-      status: 'PENDING',
-      role: 'trainer',
-    },
-    {
-      userId: 7,
-      email: 'user7@g.com',
-      password: '',
-      status: 'PENDING',
-      role: 'trainer',
-    },
-    {
-      userId: 8,
-      email: 'user8@g.com',
-      password: '',
-      status: 'PENDING',
-      role: 'trainer',
-    },
-  ];
-
   constructor(private httpClient: HttpClient) {}
 
   /*
@@ -126,15 +67,12 @@ export class AuthService {
     return this.httpClient.get<User[]>(`${this.url}resolve`, {
       headers: { Authorization: this.jwt! },
     });
-    //return of(this.pendingUsers);
-    // return this.httpClient.get<User[]>(this.url + 'resovle');
   }
 
   resolveUser(user: User): Observable<User> {
     return this.httpClient.patch(`${this.url}resolve/${user.userId}`, user, {
       headers: { Authorization: this.jwt! },
     });
-    //return of(user);
   }
 
   isLoggedIn(): boolean {
@@ -148,7 +86,6 @@ export class AuthService {
   }
 
   isTrainerAuthorized(): boolean {
-    return true;
     this.getCurrentUserInfo();
     return this.isLoggedIn() && this.decodedJwtDTO!.role == 'trainer';
   }

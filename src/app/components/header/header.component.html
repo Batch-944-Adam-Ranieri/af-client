@@ -5,11 +5,11 @@
   <mat-menu #menu="matMenu">
     <button mat-menu-item [routerLink]="['/admin-page']" routerLinkActive="router-link-active" *ngIf="currentUser?.role === 'admin'">
       <mat-icon>dashboard</mat-icon>
-      <span>Admin</span>
+      <span>Admin dashboard</span>
     </button>
     <button mat-menu-item [routerLink]="['/trainer-page']" routerLinkActive="router-link-active">
       <mat-icon>face</mat-icon>
-      <span>Trainer</span>
+      <span>Trainer dashboard</span>
     </button>
     <button mat-menu-item routerLink="/trainer-page/reservation" routerLinkActive="router-link-active">
       <mat-icon>calendar_today</mat-icon>
@@ -21,8 +21,6 @@
     </button>
   </mat-menu>
   <span><a [routerLink]="['']" routerLinkActive="router-link-active"> AssignForce</a></span>
-  <span class="spacer"></span>
-  <img src="assets/images/rev-logo.png" height=40px>
   <span class="spacer"></span>
   <p *ngIf="loggedIn" class="mx-2 mb-1">Welcome {{currentUser?.email}}</p>
   <button mat-raised-button color="primary" *ngIf="loggedIn" (click)="logout()">Logout</button>
