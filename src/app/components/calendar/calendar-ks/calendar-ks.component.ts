@@ -76,7 +76,7 @@ export class CalendarKsComponent implements OnInit {
   events: CalendarEvent[] = [];
   cancelledEvents: CalendarEvent[] = [];
   activeDayIsOpen: boolean = true;
-  showCancelled: boolean = true;
+  showCancelled: boolean = false;
 
   constructor(
     private dialog: MatDialog,
@@ -189,6 +189,9 @@ export class CalendarKsComponent implements OnInit {
             }
             return event;
           });
+          if(!this.showCancelled){
+            this.filterCancelled();
+          }
         },
         (error) => {
           console.log(error);
