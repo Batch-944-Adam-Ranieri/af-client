@@ -42,14 +42,10 @@ export class ReservationService {
   }
 
   // Read
-  getReservationsByRoom(room: Room, future: boolean): Observable<Reservation[]> {
-    let forward = "";
-    if(future) {
-      forward = `&start=${Math.floor((+ new Date()) / 1000)}`;
-    }
+  getReservationsByRoom(room: Room, start:number, end:number): Observable<Reservation[]> {
     return this.http
       .get<Reservation[]>(
-        `${this.BASE_URL}/reservations?roomId=${room.roomId}`+forward,this.options
+        `${this.BASE_URL}/reservations?start=${start}&end=${end}&roomId=${room.roomId}`,this.options
       );
   }
 
@@ -61,6 +57,15 @@ export class ReservationService {
     return this.http
       .get<Reservation[]>(
         `${this.BASE_URL}/reservations?reserver=${this.authService.decodedJwtDTO?.email}`+forward,this.options
+      );
+  }
+
+  getReservationByReserverNotCancelled(): Observable<Reservation[]> {
+    let time = new Date()
+    let start = Math.floor(time.getTime()/1000);
+    return this.http
+      .get<Reservation[]>(
+        `${this.BASE_URL}/reservations?reserver=${this.authService.decodedJwtDTO?.email}&status=reserved&start=${start}`,this.options
       );
   }
 

@@ -76,7 +76,9 @@ export class CalendarKsComponent implements OnInit {
   events: CalendarEvent[] = [];
   cancelledEvents: CalendarEvent[] = [];
   activeDayIsOpen: boolean = true;
-  showCancelled: boolean = true;
+  showCancelled: boolean = false;
+
+  currentDate?: Date;
 
   constructor(
     private dialog: MatDialog,
@@ -91,6 +93,7 @@ export class CalendarKsComponent implements OnInit {
 
   ngOnInit(): void {
     this.populateEvents();
+    this.currentDate = this.viewDate;
     this.refresh.next();
   }
 
@@ -137,8 +140,21 @@ export class CalendarKsComponent implements OnInit {
 
   // Populates Events on calendar based on what room you selected
   populateEvents() {
+
+    this.currentDate = new Date(this.viewDate);
+
+    let tempStartDate = new Date(this.currentDate);
+    tempStartDate.setDate(0);
+    tempStartDate.setHours(0,0,0,0);
+    
+    let start:number = tempStartDate.getTime()/1000;
+
+    tempStartDate.setMonth(tempStartDate.getMonth() == 11 ? 0 : tempStartDate.getMonth() + 1)
+    let end:number = tempStartDate.getTime()/1000;
+    
+    this.cancelledEvents = [];
     this.reservationService
-      .getReservationsByRoom(this.roomData!, true)
+      .getReservationsByRoom(this.roomData!, start, end)
       .pipe(
         finalize(() => {
           this.cdr.detectChanges();
@@ -167,7 +183,7 @@ export class CalendarKsComponent implements OnInit {
             let event = {
               start,
               end,
-              title: `${r.title}: : ${start.toLocaleString()} - ${end.toLocaleString()}`,
+              title: `${r.title}: ${start.toLocaleString()} - ${end.toLocaleString()}`,
               actions,
               resizable: {
                 beforeStart: resizable,
@@ -188,12 +204,16 @@ export class CalendarKsComponent implements OnInit {
             }
             return event;
           });
+          if(!this.showCancelled){
+            this.filterCancelled();
+          }
         },
         (error) => {
           this.toastr.error('Failed to load reservations');
         }
       );
   }
+  
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
@@ -484,7 +504,14 @@ export class CalendarKsComponent implements OnInit {
     this.view = view;
   }
 
+  checkCurrentDate(){
+    if(this.viewDate.getMonth() !== this.currentDate?.getMonth()){
+      this.populateEvents();
+    }
+  }
+
   closeOpenMonthViewDay() {
+    this.checkCurrentDate();
     this.activeDayIsOpen = false;
   }
 

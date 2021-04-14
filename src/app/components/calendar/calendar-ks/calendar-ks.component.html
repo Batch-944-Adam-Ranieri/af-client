@@ -6,7 +6,8 @@
       (viewDateChange)="closeOpenMonthViewDay()" class="mr-1">
       Previous
     </button>
-    <button mat-stroked-button color="accent" mwlCalendarToday [(viewDate)]="viewDate" class="mr-1">
+    <button mat-stroked-button color="accent" mwlCalendarToday [(viewDate)]="viewDate" class="mr-1"
+    (click)="checkCurrentDate()">
       Today
     </button>
     <button mat-flat-button color="primary" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"

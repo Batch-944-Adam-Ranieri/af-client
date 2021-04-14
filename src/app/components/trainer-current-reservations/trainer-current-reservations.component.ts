@@ -86,7 +86,7 @@ export class TrainerCurrentReservationsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.reservationService.getReservationByReserver(true).subscribe(
+    this.reservationService.getReservationByReserverNotCancelled().subscribe(
       (res) => {
 
         for(let r of res){
@@ -124,8 +124,9 @@ export class TrainerCurrentReservationsComponent implements OnInit {
     this.currentReservation = this.reservations[this.reservationIndex];
   }
 
+  // Will still show cancelled event, but update it as cancelled.
+  // On refresh, the event will no longer be in the array
   deleteReservation() {
-    //TODO make http request to delete the current reservation
     this.conformService.confirm().subscribe((confirm) => {
       if (confirm) {
         this.reservationService.cancelReservation(this.currentReservation.reservation).subscribe(
@@ -133,7 +134,6 @@ export class TrainerCurrentReservationsComponent implements OnInit {
             this.toastr.success('Cancelled reservation');
             //This is just for an immediate DOM update.  It should already be like this in the DB
             this.currentReservation.reservation.status = 'cancelled';
-            this.ngOnInit();
           },
           (error)=>{
             this.toastr.error('Failed to cancel reservation');
