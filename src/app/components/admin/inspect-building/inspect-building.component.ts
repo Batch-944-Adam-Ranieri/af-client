@@ -1,9 +1,4 @@
-import {
-  Component,
-  Input,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -31,11 +26,7 @@ export class InspectBuildingComponent implements OnInit {
   @Input() locationData?: string;
   selectedBuilding?: Building;
   buildingData?: Building;
-  displayedColumns: string[] = [
-    'address',
-    'roomCount',
-    'actions',
-  ];
+  displayedColumns: string[] = ['address', 'roomCount', 'actions'];
   dataSource!: MatTableDataSource<BuildingWithRoomCount>;
   resBuilding!: BuildingWithRoomCount[];
 
@@ -48,7 +39,7 @@ export class InspectBuildingComponent implements OnInit {
     private confirmService: AppConfirmService,
     public dialog: MatDialog,
     private roomService: RoomService,
-    private toastr: ToastrService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {}
@@ -105,20 +96,18 @@ export class InspectBuildingComponent implements OnInit {
       })
       .subscribe((confirm) => {
         if (confirm) {
-          this.buildingService
-            .deleteBuildingById(building)
-            .subscribe(
-              (res) => {
-                this.resBuilding = this.resBuilding.filter(
-                  (b) => b.buildingId !== building.buildingId
-                );
-                this.setTableData(this.resBuilding);
-                this.toastr.success('Building deleted');
-              },
-              (error) => {
-                this.toastr.error(error?.error?.message || error?.error?.error);
-              }
-            );
+          this.buildingService.deleteBuildingById(building).subscribe(
+            (res) => {
+              this.resBuilding = this.resBuilding.filter(
+                (b) => b.buildingId !== building.buildingId
+              );
+              this.setTableData(this.resBuilding);
+              this.toastr.success('Building deleted');
+            },
+            (error) => {
+              this.toastr.error(error?.error?.message || error?.error?.error);
+            }
+          );
         }
       });
   }
@@ -148,7 +137,8 @@ export class InspectBuildingComponent implements OnInit {
       if (result?.buildingId == 0) {
         this.buildingService.createBuilding(result).subscribe(
           (res) => {
-            this.resBuilding.push(res);
+            let temp: BuildingWithRoomCount = { ...res, roomCount: 0 };
+            this.resBuilding.push(temp);
             this.setTableData(this.resBuilding);
             this.toastr.success('Created new building');
           },
