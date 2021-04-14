@@ -57,6 +57,13 @@ export class ReservationService {
       );
   }
 
+  getReservationByReserverNotCancelled(): Observable<Reservation[]> {
+    return this.http
+      .get<Reservation[]>(
+        `${this.BASE_URL}/reservations?reserver=${this.authService.decodedJwtDTO?.email}&status=reserved`,this.options
+      );
+  }
+
   // Update
   updateReservation(
     reservation: Reservation

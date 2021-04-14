@@ -94,7 +94,6 @@ export class CalendarKsComponent implements OnInit {
   ngOnInit(): void {
     this.populateEvents();
     this.currentDate = this.viewDate;
-    console.log(this.currentDate);
     this.refresh.next();
   }
 
@@ -163,7 +162,6 @@ export class CalendarKsComponent implements OnInit {
       )
       .subscribe(
         (res) => {
-          console.log(res);
           this.events = res.map((r) => {
             let actions = undefined;
             let color = colors.gray;
@@ -477,7 +475,6 @@ export class CalendarKsComponent implements OnInit {
   }
 
   eventToReservation(event: any): any {
-    console.log(event.reservationTitle)
     return {
       reservationId: Number(event.id),
       reserver: event.reserver,
