@@ -43,10 +43,10 @@ export class ReservationService {
   }
 
   // Read
-  getReservationsByRoom(room: Room): Observable<Reservation[]> {
+  getReservationsByRoom(room: Room, start:number, end:number): Observable<Reservation[]> {
     return this.http
       .get<Reservation[]>(
-        `${this.BASE_URL}/reservations?roomId=${room.roomId}`,this.options
+        `${this.BASE_URL}/reservations?start=${start}&end=${end}&roomId=${room.roomId}`,this.options
       );
   }
 
