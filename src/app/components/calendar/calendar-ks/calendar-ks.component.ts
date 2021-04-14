@@ -168,7 +168,7 @@ export class CalendarKsComponent implements OnInit {
             let event = {
               start,
               end,
-              title: `${r.title}: : ${start.toLocaleString()} - ${end.toLocaleString()}`,
+              title: `${r.title}: ${start.toLocaleString()} - ${end.toLocaleString()}`,
               actions,
               resizable: {
                 beforeStart: resizable,
