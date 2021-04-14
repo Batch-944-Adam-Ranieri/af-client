@@ -1,4 +1,4 @@
-<mat-card class="example-card">
+<mat-card class="example-card" *ngIf="currentReservation">
   <mat-card-header>
     <mat-card-title>{{currentReservation!.reservation!.title}}</mat-card-title>
     <mat-card-subtitle>{{currentReservation!.reservation!.status}} by {{currentReservation!.reservation!.reserver}}</mat-card-subtitle>
@@ -20,4 +20,11 @@
     <button mat-button color='primary' (click)="nextReservation()">Next</button>
     <button mat-raised-button color='warn' (click)="deleteReservation()">Cancel current reservation</button>
   </mat-card-actions>
+</mat-card>
+
+<mat-card class="example-card" *ngIf="!currentReservation">
+  <mat-card-header>
+    <mat-card-title>You don't have any active reservations.</mat-card-title>
+  </mat-card-header>
+  <img mat-card-image src="assets/images/admin2.jpg" alt="Photo of a Shiba Inu">
 </mat-card>

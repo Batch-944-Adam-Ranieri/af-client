@@ -26,7 +26,6 @@ export class ReservationService {
   createReservation(
     reservation: Reservation
   ): Observable<Reservation> {
-    console.log('reservation.service.createReservation:', reservation);
     let body =  // formatting reservation with fields the backend expects
     {
       startTime: reservation.startTime,
@@ -50,10 +49,14 @@ export class ReservationService {
       );
   }
 
-  getReservationByReserver(): Observable<Reservation[]> {
+  getReservationByReserver(future: boolean): Observable<Reservation[]> {
+    let forward = "";
+    if(future) {
+      forward = `&start=${Math.floor((+ new Date()) / 1000)}`;
+    }
     return this.http
       .get<Reservation[]>(
-        `${this.BASE_URL}/reservations?reserver=${this.authService.decodedJwtDTO?.email}`,this.options
+        `${this.BASE_URL}/reservations?reserver=${this.authService.decodedJwtDTO?.email}`+forward,this.options
       );
   }
 

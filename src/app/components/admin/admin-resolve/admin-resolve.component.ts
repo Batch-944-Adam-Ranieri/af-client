@@ -71,7 +71,6 @@ export class AdminResolveComponent implements OnInit, AfterViewInit {
             this.setTable();
           },
           (error) => {
-            console.log(error);
             this.toastr.error(error?.error?.message || error?.error?.error);
           }
         );

@@ -1,8 +1,6 @@
 import {
-  AfterViewInit,
   Component,
   OnInit,
-  Output,
   ViewChild,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -12,7 +10,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
 import { Location } from 'src/app/models/location';
 import { AppConfirmService } from 'src/app/services/app-confirm/app-confirm.service';
-import { AppLoaderService } from 'src/app/services/app-loader/app-loader.service';
 import { BuildingService } from 'src/app/services/building/building.service';
 import { LocationService } from 'src/app/services/location/location.service';
 import { AddLocationComponent } from '../add-location/add-location.component';
@@ -50,7 +47,6 @@ export class InspectLocationComponent implements OnInit {
     private confirmService: AppConfirmService,
     private toastr: ToastrService,
     private buildingService: BuildingService,
-    private loader: AppLoaderService
   ) {}
 
   ngOnInit(): void {
@@ -58,16 +54,13 @@ export class InspectLocationComponent implements OnInit {
   }
 
   createTable(): void {
-    this.loader.open();
     this.locationService.getAllLocation().subscribe(
       (res) => {
         this.resLocation = res;
         this.setTableData(res);
-        this.loader.close();
       },
       (error) => {
         this.toastr.error(error?.error?.message || error?.error?.error);
-        this.loader.close();
       }
     );
   }
@@ -97,17 +90,14 @@ export class InspectLocationComponent implements OnInit {
       .confirm({ message: `Delete ${location.name}`, title: 'Delete location' })
       .subscribe((confirm) => {
         if (confirm) {
-          this.loader.open();
           this.locationService.deleteLocation(location).subscribe(
             (res) => {
               this.resLocation = this.resLocation!.filter( loc => loc.locationId !== location.locationId);
               this.setTableData(this.resLocation!);
               this.toastr.success('Deleted location');
-              this.loader.close();
             },
             (error) => {
               this.toastr.error(error?.error?.message || error?.error?.error);
-              this.loader.close();
             }
           );
         }
@@ -135,35 +125,25 @@ export class InspectLocationComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result?.locationId == 0) {
-        this.loader.open();
         this.locationService.createLocation(result).subscribe(
           (res) => {
             this.resLocation?.push(res);
             this.setTableData(this.resLocation!);
             this.toastr.success('Created new location');
-            this.loader.close();
           },
           (error) => {
             this.toastr.error(error?.error?.message || error?.error?.error);
-            this.loader.close();
           }
         );
       } else if (result?.locationId) {
-        this.loader.open();
-        console.log("update location", result);
-        
         this.locationService.updateLocation(result).subscribe(
           (res) => {
             this.resLocation = this.resLocation!.map( loc => loc.locationId == res.locationId ? res : loc);
             this.setTableData(this.resLocation!);
             this.toastr.success('Updated location');
-            this.loader.close();
-            console.log("res update", res);
-            
           },
           (error) => {
             this.toastr.error(error?.error?.message || error?.error?.error);
-            this.loader.close();
           }
         );
       }

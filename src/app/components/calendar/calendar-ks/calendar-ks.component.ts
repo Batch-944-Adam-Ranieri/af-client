@@ -209,7 +209,6 @@ export class CalendarKsComponent implements OnInit {
           }
         },
         (error) => {
-          console.log(error);
           this.toastr.error('Failed to load reservations');
         }
       );
@@ -408,6 +407,7 @@ export class CalendarKsComponent implements OnInit {
               const { reserver, start, end } = event;
               event.id = result.reservationId;
               event.title = `${result.title}: ${start.toLocaleString()} - ${end.toLocaleString()}`;
+              event.reserver = result.reserver;
               event.actions = this.actions;
               event.color = colors.blue;
               event.status = 'reserved';

@@ -100,6 +100,7 @@ export class TrainerCurrentReservationsComponent implements OnInit {
         this.currentReservation = this.reservations[this.reservationIndex];    
       },
       (error: any) => {
+        this.toastr.error(error);
         console.log(error);
       }
     );
@@ -128,8 +129,6 @@ export class TrainerCurrentReservationsComponent implements OnInit {
   deleteReservation() {
     this.conformService.confirm().subscribe((confirm) => {
       if (confirm) {
-        // will delete
-        console.log(this.currentReservation.reservation)
         this.reservationService.cancelReservation(this.currentReservation.reservation).subscribe(
           (result)=>{
             this.toastr.success('Cancelled reservation');

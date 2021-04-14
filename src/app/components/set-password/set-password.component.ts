@@ -37,7 +37,6 @@ export class SetPasswordComponent implements OnInit {
         }
       },
       (error) => {
-        console.log(error);
         this.toastr.error('Unable to change password');
       }
     );

@@ -1,12 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatStep, MatStepper } from '@angular/material/stepper';
 
 import { Building } from 'src/app/models/building';
 import { Location } from 'src/app/models/location';
 import { Room } from 'src/app/models/room';
-import { AppConfirmService } from 'src/app/services/app-confirm/app-confirm.service';
 import { BuildingService } from 'src/app/services/building/building.service';
 import { LocationService } from 'src/app/services/location/location.service';
 import { RoomService } from 'src/app/services/room/room.service';
@@ -36,18 +34,15 @@ export class ReservationPageComponent implements OnInit {
   @ViewChild('roomStep') roomStep!: MatStep;
 
   constructor(
-    private _formBuilder: FormBuilder,
     private locationService: LocationService,
     private buildingService: BuildingService,
     private roomService: RoomService,
-    public dialog: MatDialog,
-    private confirmService: AppConfirmService
+    public dialog: MatDialog
   ) {}
 
   ngOnInit() {}
 
-  initCalendarChild(){
-    console.log("Init calendar");
+  initCalendarChild() {
     if (this.calendarChild) {
       this.calendarChild.roomData = this.selectedRoom;
       this.calendarChild.ngOnInit();
@@ -74,26 +69,33 @@ export class ReservationPageComponent implements OnInit {
     }
     if (
       this.selectedLocation &&
-      this.selectedLocation.locationId !== this.locationService.currentLocation.locationId
+      this.selectedLocation.locationId !==
+        this.locationService.currentLocation.locationId
     ) {
       this.stepper.reset();
       this.resetBuildingRoom();
     }
     this.selectedLocation = this.locationService.currentLocation;
-    this.buildingChild.ngOnInit();
     this.stepper.selected.completed = true;
   }
 
   getCurrentBuilding() {
     this.selectedBuilding = this.buildingService.currentBuilding;
-    this.roomChild.ngOnInit();
     this.stepper.selected.completed = true;
   }
 
   getCurrentRoom() {
     this.selectedRoom = this.roomService.currentRoom;
     this.stepper.selected.completed = true;
-    this.initCalendarChild();
   }
 
+  stepperOnChange(event: any) {
+    if (event.selectedIndex == 1) {
+      this.buildingChild.ngOnInit();
+    } else if (event.selectedIndex == 2) {
+      this.roomChild.ngOnInit();
+    } else if (event.selectedIndex == 3) {
+      this.initCalendarChild();
+    }
+  }
 }

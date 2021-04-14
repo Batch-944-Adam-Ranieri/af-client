@@ -1,9 +1,4 @@
-import {
-  Component,
-  Input,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -11,7 +6,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
 import { Building } from 'src/app/models/building';
 import { AppConfirmService } from 'src/app/services/app-confirm/app-confirm.service';
-import { AppLoaderService } from 'src/app/services/app-loader/app-loader.service';
 import { BuildingService } from 'src/app/services/building/building.service';
 import { LocationService } from 'src/app/services/location/location.service';
 import { RoomService } from 'src/app/services/room/room.service';
@@ -32,11 +26,7 @@ export class InspectBuildingComponent implements OnInit {
   @Input() locationData?: string;
   selectedBuilding?: Building;
   buildingData?: Building;
-  displayedColumns: string[] = [
-    'address',
-    'roomCount',
-    'actions',
-  ];
+  displayedColumns: string[] = ['address', 'roomCount', 'actions'];
   dataSource!: MatTableDataSource<BuildingWithRoomCount>;
   resBuilding!: BuildingWithRoomCount[];
 
@@ -49,14 +39,12 @@ export class InspectBuildingComponent implements OnInit {
     private confirmService: AppConfirmService,
     public dialog: MatDialog,
     private roomService: RoomService,
-    private toastr: ToastrService,
-    private loader: AppLoaderService
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {}
 
   createTable(): void {
-    this.loader.open();
     this.buildingService
       .getBuildingsByLocationId(
         this.locationService.currentLocation?.locationId!
@@ -74,11 +62,9 @@ export class InspectBuildingComponent implements OnInit {
           });
           this.setTableData(arr);
           this.resBuilding = arr;
-          this.loader.close();
         },
         (error) => {
           this.toastr.error(error?.error?.message || error?.error?.error);
-          this.loader.close();
         }
       );
   }
@@ -110,23 +96,18 @@ export class InspectBuildingComponent implements OnInit {
       })
       .subscribe((confirm) => {
         if (confirm) {
-          this.loader.open();
-          this.buildingService
-            .deleteBuildingById(building)
-            .subscribe(
-              (res) => {
-                this.resBuilding = this.resBuilding.filter(
-                  (b) => b.buildingId !== building.buildingId
-                );
-                this.setTableData(this.resBuilding);
-                this.toastr.success('Building deleted');
-                this.loader.close();
-              },
-              (error) => {
-                this.toastr.error(error?.error?.message || error?.error?.error);
-                this.loader.close();
-              }
-            );
+          this.buildingService.deleteBuildingById(building).subscribe(
+            (res) => {
+              this.resBuilding = this.resBuilding.filter(
+                (b) => b.buildingId !== building.buildingId
+              );
+              this.setTableData(this.resBuilding);
+              this.toastr.success('Building deleted');
+            },
+            (error) => {
+              this.toastr.error(error?.error?.message || error?.error?.error);
+            }
+          );
         }
       });
   }
@@ -154,24 +135,20 @@ export class InspectBuildingComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result: BuildingWithRoomCount) => {
       if (result?.buildingId == 0) {
-        this.loader.open();
         this.buildingService.createBuilding(result).subscribe(
           (res) => {
-            this.loader.close();
-            this.resBuilding.push(res);
+            let temp: BuildingWithRoomCount = { ...res, roomCount: 0 };
+            this.resBuilding.push(temp);
             this.setTableData(this.resBuilding);
             this.toastr.success('Created new building');
           },
           (error) => {
-            this.loader.close();
             this.toastr.error(error?.error?.message || error?.error?.error);
           }
         );
       } else if (result?.buildingId) {
-        this.loader.open();
         this.buildingService.updateBuilding(result).subscribe(
           (res) => {
-            this.loader.close();
             this.resBuilding = this.resBuilding.map((b) =>
               b.buildingId == result.buildingId ? result : b
             );
@@ -180,7 +157,6 @@ export class InspectBuildingComponent implements OnInit {
           },
           (error) => {
             this.toastr.error(error?.error?.message || error?.error?.error);
-            this.loader.close();
           }
         );
       }

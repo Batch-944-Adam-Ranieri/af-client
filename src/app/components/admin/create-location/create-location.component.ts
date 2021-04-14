@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
 import { ToastrService } from 'ngx-toastr';
 import { Building } from 'src/app/models/building';
@@ -30,7 +29,6 @@ export class CreateLocationComponent implements OnInit {
 
   constructor(
     private locationService: LocationService,
-    private _formBuilder: FormBuilder,
     private buildingService: BuildingService,
     private toastr: ToastrService
   ) {}
