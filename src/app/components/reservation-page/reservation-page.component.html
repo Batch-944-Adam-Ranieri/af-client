@@ -1,6 +1,6 @@
 <div class="container">
 
-  <mat-horizontal-stepper linear #stepper>
+  <mat-horizontal-stepper linear #stepper (selectionChange)="stepperOnChange($event)">
 
     <!-- SELECT LOCATION -->
     <mat-step label="Select Location" completed="false">
