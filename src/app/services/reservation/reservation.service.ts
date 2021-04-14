@@ -58,9 +58,11 @@ export class ReservationService {
   }
 
   getReservationByReserverNotCancelled(): Observable<Reservation[]> {
+    let time = new Date()
+    let start = Math.floor(time.getTime()/1000);
     return this.http
       .get<Reservation[]>(
-        `${this.BASE_URL}/reservations?reserver=${this.authService.decodedJwtDTO?.email}&status=reserved`,this.options
+        `${this.BASE_URL}/reservations?reserver=${this.authService.decodedJwtDTO?.email}&status=reserved&start=${start}`,this.options
       );
   }
 
